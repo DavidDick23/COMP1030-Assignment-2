@@ -1,6 +1,6 @@
 ﻿<xml xmlns="https://developers.google.com/blockly/xml">
 	<!-- ============================
-       Agent Mode - Number Guessing Game
+       Agent Mode - Number Guessing Game - By Mark
        Generated with ChatGPT5 (November 2025)
        This XML implements binary search logic with keyboard input (H/L/C)
        ============================ -->
@@ -321,3 +321,4 @@
 		</next>
 	</block>
 </xml>
+
