@@ -1,0 +1,323 @@
+﻿<xml xmlns="https://developers.google.com/blockly/xml">
+	<!-- ============================
+       Agent Mode - Number Guessing Game
+       Generated with ChatGPT5 (November 2025)
+       This XML implements binary search logic with keyboard input (H/L/C)
+       ============================ -->
+
+	<!-- === Variable Declarations === -->
+	<variables>
+		<variable id="low">low</variable>
+		<variable id="high">high</variable>
+		<variable id="mid">mid</variable>
+		<variable id="attempts">attempts</variable>
+		<variable id="maxAttempts">maxAttempts</variable>
+		<variable id="input">input</variable>
+	</variables>
+
+	<!-- === Initialization Section === -->
+	<block type="variables_set" id="init_low" x="10" y="10">
+		<!-- Set initial lower bound -->
+		<field name="VAR" id="low">low</field>
+		<value name="VALUE">
+			<shadow type="math_number">
+				<field name="NUM">1</field>
+			</shadow>
+		</value>
+		<next>
+			<block type="variables_set" id="init_high">
+				<!-- Set initial upper bound -->
+				<field name="VAR" id="high">high</field>
+				<value name="VALUE">
+					<shadow type="math_number">
+						<field name="NUM">100</field>
+					</shadow>
+				</value>
+				<next>
+					<block type="variables_set" id="init_attempts">
+						<!-- Initialize attempt counter -->
+						<field name="VAR" id="attempts">attempts</field>
+						<value name="VALUE">
+							<shadow type="math_number">
+								<field name="NUM">0</field>
+							</shadow>
+						</value>
+						<next>
+							<block type="variables_set" id="init_maxAttempts">
+								<!-- Maximum number of attempts allowed -->
+								<field name="VAR" id="maxAttempts">maxAttempts</field>
+								<value name="VALUE">
+									<shadow type="math_number">
+										<field name="NUM">7</field>
+									</shadow>
+								</value>
+
+								<!-- === Start of Main Game Loop === -->
+								<next>
+									<block type="controls_whileUntil" id="while_loop">
+										<field name="MODE">WHILE</field>
+										<value name="BOOL">
+											<!-- Loop runs while attempts < maxAttempts -->
+											<block type="logic_compare">
+												<field name="OP">LT</field>
+												<value name="A">
+													<block type="variables_get">
+														<field name="VAR" id="attempts">attempts</field>
+													</block>
+												</value>
+												<value name="B">
+													<block type="variables_get">
+														<field name="VAR" id="maxAttempts">maxAttempts</field>
+													</block>
+												</value>
+											</block>
+										</value>
+
+										<!-- === Main Game Logic === -->
+										<statement name="DO">
+											<block type="variables_set" id="set_mid">
+												<!-- Calculate midpoint guess -->
+												<field name="VAR" id="mid">mid</field>
+												<value name="VALUE">
+													<block type="math_arithmetic">
+														<field name="OP">DIVIDE</field>
+														<value name="A">
+															<block type="math_arithmetic">
+																<field name="OP">ADD</field>
+																<value name="A">
+																	<block type="variables_get">
+																		<field name="VAR" id="low">low</field>
+																	</block>
+																</value>
+																<value name="B">
+																	<block type="variables_get">
+																		<field name="VAR" id="high">high</field>
+																	</block>
+																</value>
+															</block>
+														</value>
+														<value name="B">
+															<shadow type="math_number">
+																<field name="NUM">2</field>
+															</shadow>
+														</value>
+													</block>
+												</value>
+
+												<!-- === Drone Makes a Guess === -->
+												<next>
+													<block type="text_print" id="print_guess">
+														<!-- Display the current guess -->
+														<value name="TEXT">
+															<shadow type="text"></shadow>
+															<block type="text_join">
+																<mutation items="2"></mutation>
+																<value name="ADD0">
+																	<block type="text">
+																		<field name="TEXT">My guess is </field>
+																	</block>
+																</value>
+																<value name="ADD1">
+																	<block type="variables_get">
+																		<field name="VAR" id="mid">mid</field>
+																	</block>
+																</value>
+															</block>
+														</value>
+
+														<!-- === Get Player Input (H/L/C) === -->
+														<next>
+															<block type="variables_set" id="set_input">
+																<field name="VAR" id="input">input</field>
+																<value name="VALUE">
+																	<block type="text_prompt_ext">
+																		<mutation type="TEXT"></mutation>
+																		<field name="TYPE">TEXT</field>
+																		<value name="TEXT">
+																			<shadow type="text">
+																				<field name="TEXT">Is your number Higher (H), Lower (L), or Correct (C)?</field>
+																			</shadow>
+																		</value>
+																	</block>
+																</value>
+
+																<!-- === Conditional Responses === -->
+																<next>
+																	<block type="controls_if" id="if_input">
+																		<mutation elseif="2"></mutation>
+
+																		<!-- Case 1: Player says "H" (number is higher) -->
+																		<value name="IF0">
+																			<block type="logic_compare">
+																				<field name="OP">EQ</field>
+																				<value name="A">
+																					<block type="variables_get">
+																						<field name="VAR" id="input">input</field>
+																					</block>
+																				</value>
+																				<value name="B">
+																					<block type="text">
+																						<field name="TEXT">H</field>
+																					</block>
+																				</value>
+																			</block>
+																		</value>
+																		<statement name="DO0">
+																			<block type="variables_set" id="low_plus1">
+																				<!-- Move low boundary up -->
+																				<field name="VAR" id="low">low</field>
+																				<value name="VALUE">
+																					<block type="math_arithmetic">
+																						<field name="OP">ADD</field>
+																						<value name="A">
+																							<block type="variables_get">
+																								<field name="VAR" id="mid">mid</field>
+																							</block>
+																						</value>
+																						<value name="B">
+																							<shadow type="math_number">
+																								<field name="NUM">1</field>
+																							</shadow>
+																						</value>
+																					</block>
+																				</value>
+																				<!-- Drone LED feedback -->
+																				<next>
+																					<block type="drone_set_led_all">
+																						<field name="COLOR">red</field>
+																					</block>
+																				</next>
+																			</block>
+																		</statement>
+
+																		<!-- Case 2: Player says "L" (number is lower) -->
+																		<value name="IF1">
+																			<block type="logic_compare">
+																				<field name="OP">EQ</field>
+																				<value name="A">
+																					<block type="variables_get">
+																						<field name="VAR" id="input">input</field>
+																					</block>
+																				</value>
+																				<value name="B">
+																					<block type="text">
+																						<field name="TEXT">L</field>
+																					</block>
+																				</value>
+																			</block>
+																		</value>
+																		<statement name="DO1">
+																			<block type="variables_set" id="high_minus1">
+																				<!-- Move high boundary down -->
+																				<field name="VAR" id="high">high</field>
+																				<value name="VALUE">
+																					<block type="math_arithmetic">
+																						<field name="OP">MINUS</field>
+																						<value name="A">
+																							<block type="variables_get">
+																								<field name="VAR" id="mid">mid</field>
+																							</block>
+																						</value>
+																						<value name="B">
+																							<shadow type="math_number">
+																								<field name="NUM">1</field>
+																							</shadow>
+																						</value>
+																					</block>
+																				</value>
+																				<!-- Drone LED feedback -->
+																				<next>
+																					<block type="drone_set_led_all">
+																						<field name="COLOR">yellow</field>
+																					</block>
+																				</next>
+																			</block>
+																		</statement>
+
+																		<!-- Case 3: Player says "C" (correct guess) -->
+																		<value name="IF2">
+																			<block type="logic_compare">
+																				<field name="OP">EQ</field>
+																				<value name="A">
+																					<block type="variables_get">
+																						<field name="VAR" id="input">input</field>
+																					</block>
+																				</value>
+																				<value name="B">
+																					<block type="text">
+																						<field name="TEXT">C</field>
+																					</block>
+																				</value>
+																			</block>
+																		</value>
+																		<statement name="DO2">
+																			<!-- Drone LED feedback and motion on success -->
+																			<block type="drone_set_led_all">
+																				<field name="COLOR">green</field>
+																			</block>
+																			<next>
+																				<block type="drone_flight_circle"></block>
+																			</next>
+																			<next>
+																				<block type="text_print">
+																					<value name="TEXT">
+																						<shadow type="text">
+																							<field name="TEXT">I found it!</field>
+																						</shadow>
+																					</value>
+																				</block>
+																			</next>
+																			<!-- Exit loop -->
+																			<next>
+																				<block type="controls_flow_statements">
+																					<field name="FLOW">BREAK</field>
+																				</block>
+																			</next>
+																		</statement>
+
+																		<!-- Increment attempt counter -->
+																		<next>
+																			<block type="math_change">
+																				<field name="VAR" id="attempts">attempts</field>
+																				<value name="DELTA">
+																					<shadow type="math_number">
+																						<field name="NUM">1</field>
+																					</shadow>
+																				</value>
+																			</block>
+																		</next>
+																	</block>
+																</next>
+															</block>
+														</next>
+													</block>
+												</next>
+											</block>
+										</statement>
+
+										<!-- === End of Loop: Out of Guesses === -->
+										<next>
+											<block type="text_print" id="out_of_guesses">
+												<value name="TEXT">
+													<shadow type="text">
+														<field name="TEXT">Out of guesses!</field>
+													</shadow>
+												</value>
+												<next>
+													<!-- Drone flashes red if failed -->
+													<block type="drone_set_led_all">
+														<field name="COLOR">red</field>
+													</block>
+												</next>
+											</block>
+										</next>
+									</block>
+								</next>
+							</block>
+						</next>
+					</block>
+				</next>
+			</block>
+		</next>
+	</block>
+</xml>
